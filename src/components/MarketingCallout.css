@@ -1,10 +1,22 @@
 .marketing-callout {
   background: var(--white);
-  padding-top: 0;
+  position: relative;
+}
+
+.marketing-pin-wrap {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--white);
 }
 
 .marketing-panel {
   position: relative;
+  width: min(1400px, calc(100vw - clamp(48px, 10vw, 160px)));
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   align-items: center;
@@ -14,6 +26,7 @@
   background: radial-gradient(120% 140% at 100% 0%, #16265e 0%, #0c1638 45%, #060a1a 100%);
   overflow: hidden;
   isolation: isolate;
+  will-change: width, height, border-radius;
 }
 
 .marketing-panel::before {
@@ -129,6 +142,10 @@
 }
 
 @media (max-width: 900px) {
+  .marketing-pin-wrap {
+    height: auto;
+    padding: 90px 0;
+  }
   .marketing-panel {
     grid-template-columns: 1fr;
   }

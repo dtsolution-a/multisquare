@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { gsap } from "../lib/gsap";
+import { gsap, ScrollTrigger } from "../lib/gsap";
 import useMagnetic from "../lib/useMagnetic";
 import towerIsolated from "../assets/tower-isolated.webp";
 import "./MarketingCallout.css";
@@ -14,52 +14,59 @@ const TITLE_LINES = ["Growth & marketing", "strategy, handled by", "our partner 
 
 export default function MarketingCallout() {
   const rootRef = useRef(null);
+  const pinWrapRef = useRef(null);
+  const panelRef = useRef(null);
   const ctaRef = useRef(null);
   const towerRef = useRef(null);
   useMagnetic(ctaRef, 0.25);
 
   useEffect(() => {
+    if (
+      window.innerWidth < 900 ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".marketing-panel",
-        { opacity: 0, y: 50, scale: 0.97, filter: "blur(6px)" },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          filter: "blur(0px)",
-          duration: 1.1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: rootRef.current, start: "top 78%" },
-        }
-      );
+      const panel = panelRef.current;
+      const pinWrap = pinWrapRef.current;
 
-      gsap.fromTo(
-        ".marketing-title .split-line > span",
-        { yPercent: 110, opacity: 0, filter: "blur(8px)" },
-        {
-          yPercent: 0,
-          opacity: 1,
-          filter: "blur(0px)",
-          duration: 1,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: ".marketing-title", start: "top 82%" },
-        }
-      );
+      const measure = () => {
+        gsap.set(panel, { clearProps: "width,height" });
+        const rect = panel.getBoundingClientRect();
+        gsap.set(panel, {
+          width: rect.width,
+          height: rect.height,
+          borderRadius: 32,
+        });
+        return rect;
+      };
 
-      gsap.fromTo(
-        ".marketing-stat",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: { trigger: ".marketing-stats", start: "top 88%" },
-        }
-      );
+      measure();
+
+      // Content reveals as soon as the section enters view — independent of
+      // the pin/expand scroll below, so the card is never sitting empty.
+      const entrance = gsap.timeline({
+        scrollTrigger: { trigger: pinWrap, start: "top 85%" },
+      });
+
+      entrance
+        .fromTo(towerRef.current, { opacity: 0, scale: 1.06 }, { opacity: 0.5, scale: 1, duration: 1.2, ease: "power3.out" }, 0)
+        .fromTo(
+          ".marketing-title .split-line > span",
+          { yPercent: 110, opacity: 0, filter: "blur(8px)" },
+          { yPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.9, stagger: 0.1, ease: "power3.out" },
+          0.1
+        )
+        .fromTo(".marketing-lede", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.35)
+        .fromTo(
+          ".marketing-stat",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: "power3.out" },
+          0.45
+        )
+        .fromTo(".marketing-cta", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.6);
 
       gsap.utils.toArray(".marketing-stat").forEach((stat) => {
         const numEl = stat.querySelector(".marketing-stat-num");
@@ -69,39 +76,26 @@ export default function MarketingCallout() {
         const counter = { val: 0 };
         gsap.to(counter, {
           val: target,
-          duration: 1.4,
+          duration: 1.3,
           ease: "power2.out",
-          scrollTrigger: { trigger: stat, start: "top 90%" },
+          scrollTrigger: { trigger: pinWrap, start: "top 80%" },
           onUpdate: () => {
             numEl.textContent = `${counter.val.toFixed(decimals)}${suffix}`;
           },
         });
       });
 
-      const path = rootRef.current.querySelector(".marketing-chart path");
+      const path = pinWrap.querySelector(".marketing-chart path");
       if (path) {
         const len = path.getTotalLength();
         gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
         gsap.to(path, {
           strokeDashoffset: 0,
-          duration: 1.6,
+          duration: 1.4,
           ease: "power2.inOut",
-          scrollTrigger: { trigger: rootRef.current, start: "top 65%" },
+          scrollTrigger: { trigger: pinWrap, start: "top 80%" },
         });
       }
-
-      gsap.fromTo(
-        towerRef.current,
-        { opacity: 0, scale: 1.08, y: 40 },
-        {
-          opacity: 0.5,
-          scale: 1,
-          y: 0,
-          duration: 1.4,
-          ease: "power3.out",
-          scrollTrigger: { trigger: rootRef.current, start: "top 78%" },
-        }
-      );
 
       gsap.to(towerRef.current, {
         y: "+=22",
@@ -111,24 +105,33 @@ export default function MarketingCallout() {
         repeat: -1,
       });
 
-      gsap.to(towerRef.current, {
-        yPercent: 14,
-        ease: "none",
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+      // The pin/expand grow is purely the card's geometry — content is
+      // already visible by the time this kicks in.
+      const st = ScrollTrigger.create({
+        trigger: pinWrap,
+        start: "top top",
+        end: "+=1200",
+        scrub: 1,
+        pin: true,
+        pinSpacing: true,
+        invalidateOnRefresh: true,
+        onRefreshInit: measure,
+        animation: gsap.timeline().to(
+          panel,
+          { width: () => window.innerWidth, height: () => window.innerHeight, borderRadius: 0, ease: "none" },
+          0
+        ),
       });
+
+      return () => st.kill();
     }, rootRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section className="marketing-callout section-pad" id="marketing" ref={rootRef}>
-      <div className="container">
-        <div className="marketing-panel">
+    <section className="marketing-callout" id="marketing" ref={rootRef}>
+      <div className="marketing-pin-wrap" ref={pinWrapRef}>
+        <div className="marketing-panel" ref={panelRef}>
           <img
             ref={towerRef}
             src={towerIsolated}
