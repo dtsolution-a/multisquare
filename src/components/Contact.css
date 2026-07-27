@@ -1,0 +1,186 @@
+.contact {
+  background: var(--white);
+  position: relative;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 70px;
+}
+
+.contact-title {
+  margin-top: 20px;
+  font-size: clamp(30px, 3.8vw, 46px);
+  max-width: 12ch;
+}
+
+.contact-lede {
+  margin-top: 22px;
+  color: var(--grey-600);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 42ch;
+}
+
+.contact-map {
+  position: relative;
+  margin-top: 50px;
+  height: 260px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--blue-900);
+}
+
+.contact-map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: 0.6;
+}
+
+.contact-map::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 60% at 55% 45%, rgba(26,63,214,0.5), transparent 70%);
+}
+
+.contact-map-pin {
+  position: absolute;
+  top: 45%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+}
+
+.pin-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--blue-500);
+  box-shadow: 0 0 0 4px rgba(59,91,255,0.3);
+}
+
+.pin-ring {
+  position: absolute;
+  inset: -14px;
+  border: 1px solid rgba(59,91,255,0.5);
+  border-radius: 50%;
+  animation: pin-pulse 2.4s ease-out infinite;
+}
+
+@keyframes pin-pulse {
+  0% { transform: scale(0.4); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.contact-map-label {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.field {
+  position: relative;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--grey-200);
+  padding: 14px 2px 12px;
+  font-size: 16px;
+  font-family: inherit;
+  background: transparent;
+  resize: none;
+  transition: border-color 0.4s var(--ease-soft);
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--blue-600);
+}
+
+.field label {
+  position: absolute;
+  left: 2px;
+  top: 14px;
+  color: var(--grey-400);
+  font-size: 16px;
+  pointer-events: none;
+  transition: transform 0.35s var(--ease-lux), font-size 0.35s var(--ease-lux), color 0.35s;
+  transform-origin: left top;
+}
+
+.field label.is-active {
+  transform: translateY(-20px);
+  font-size: 12px;
+  color: var(--blue-600);
+}
+
+.contact-submit {
+  align-self: flex-start;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  animation: ripple-anim 0.65s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-anim {
+  to {
+    transform: translate(-50%, -50%) scale(24);
+    opacity: 0;
+  }
+}
+
+.whatsapp-fab {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #1fb855;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 30px -10px rgba(31,184,85,0.55);
+  z-index: 400;
+}
+
+.whatsapp-fab svg {
+  width: 28px;
+  height: 28px;
+}
+
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
