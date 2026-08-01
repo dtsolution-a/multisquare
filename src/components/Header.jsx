@@ -7,7 +7,7 @@ import logoMarkNavy from "../assets/logo-mark-navy.png";
 import "./Header.css";
 
 const NAV = [
-  { label: "Services", to: "/#services" },
+  { label: "Services", to: "/services" },
   { label: "Marketing", to: "/#marketing" },
   { label: "Why M2", to: "/#why" },
   { label: "About", to: "/about" },

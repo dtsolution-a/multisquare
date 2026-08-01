@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import AboutPage from "./pages/AboutPage";
+import ServicesPage from "./pages/ServicesPage";
 
 function App() {
   const [ready, setReady] = useState(false);
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home ready={ready} />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/services" element={<ServicesPage />} />
         </Routes>
       </main>
       <Footer />

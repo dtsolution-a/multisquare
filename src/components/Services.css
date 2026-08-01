@@ -7,6 +7,19 @@
   margin-bottom: 70px;
 }
 
+.services-head {
+  max-width: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.services-more {
+  margin-bottom: 4px;
+}
+
 .services-title {
   margin-top: 20px;
   font-size: clamp(30px, 4vw, 50px);

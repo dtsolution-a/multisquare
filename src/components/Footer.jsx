@@ -9,10 +9,11 @@ const COLS = [
   {
     title: "Services",
     links: [
-      { label: "Company Formation", to: "/#services" },
-      { label: "Virtual CFO", to: "/#services" },
-      { label: "M&A Advisory", to: "/#services" },
-      { label: "Tax & Compliance", to: "/#services" },
+      { label: "Company Formation", to: "/services#registration-licenses-visa" },
+      { label: "Virtual CFO", to: "/services#virtual-cfo" },
+      { label: "M&A Advisory", to: "/services#due-diligence-ma" },
+      { label: "Tax & Compliance", to: "/services#compliance-taxation" },
+      { label: "All Services", to: "/services" },
     ],
   },
   {
