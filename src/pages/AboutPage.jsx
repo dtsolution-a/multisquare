@@ -241,6 +241,28 @@ export default function AboutPage() {
         });
       });
 
+      // Ambient motion that keeps running after the scroll-reveals are done —
+      // the page shouldn't go still once you've stopped scrolling.
+      gsap.utils.toArray(".founder-blob").forEach((blob, i) => {
+        gsap.to(blob, {
+          y: i % 2 === 0 ? "+=26" : "-=26",
+          x: i % 2 === 0 ? "+=16" : "-=16",
+          duration: 5 + i,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+      });
+
+      gsap.to(".founders-bg-blob", {
+        x: "+=120",
+        y: "+=60",
+        duration: 14,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+
       gsap.fromTo(
         ".about-cta-inner",
         { opacity: 0, y: 30 },
@@ -258,6 +280,47 @@ export default function AboutPage() {
       ctx.revert();
       splits.forEach((s) => s.revert());
     };
+  }, []);
+
+  // Cursor-reactive tilt + glow on the founder portraits — interactive life
+  // that isn't tied to a one-shot scroll reveal.
+  useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) return;
+    const medias = rootRef.current.querySelectorAll(".founder-media");
+    const cleanups = [];
+
+    medias.forEach((media) => {
+      const light = media.querySelector(".founder-media-light");
+
+      const onMove = (e) => {
+        const rect = media.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotY = (x / rect.width - 0.5) * 10;
+        const rotX = (y / rect.height - 0.5) * -10;
+        gsap.to(media, {
+          rotateY: rotY,
+          rotateX: rotX,
+          duration: 0.6,
+          ease: "power3.out",
+          transformPerspective: 900,
+        });
+        gsap.to(light, { x, y, duration: 0.5, ease: "power3.out" });
+      };
+
+      const onLeave = () => {
+        gsap.to(media, { rotateX: 0, rotateY: 0, duration: 0.8, ease: "power3.out" });
+      };
+
+      media.addEventListener("mousemove", onMove);
+      media.addEventListener("mouseleave", onLeave);
+      cleanups.push(() => {
+        media.removeEventListener("mousemove", onMove);
+        media.removeEventListener("mouseleave", onLeave);
+      });
+    });
+
+    return () => cleanups.forEach((fn) => fn());
   }, []);
 
   return (
@@ -326,6 +389,7 @@ export default function AboutPage() {
       </section>
 
       <section className="section-pad founders-section" id="founders">
+        <div className="founders-bg-blob" />
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Leadership</p>
@@ -334,9 +398,14 @@ export default function AboutPage() {
 
           {FOUNDERS.map((f, i) => (
             <article className={`founder-row ${i % 2 === 1 ? "is-reverse" : ""}`} key={f.name}>
+              <span className="founder-index" aria-hidden="true">
+                0{i + 1}
+              </span>
               <div className="founder-media">
+                <div className="founder-blob" />
                 <div className="founder-mask">
                   <img src={f.photo} alt={f.name} className="founder-photo" />
+                  <div className="founder-media-light" />
                 </div>
               </div>
               <div className="founder-copy">
