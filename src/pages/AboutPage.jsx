@@ -90,19 +90,45 @@ export default function AboutPage() {
         },
       });
 
-      gsap.utils.toArray(".story-timeline-row").forEach((row, i) => {
-        gsap.fromTo(
-          row,
-          { opacity: 0, x: -30 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.9,
-            delay: i * 0.05,
-            ease: "power3.out",
-            scrollTrigger: { trigger: row, start: "top 88%" },
-          }
-        );
+      gsap.fromTo(
+        ".story-timeline-line",
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: "none",
+          transformOrigin: "top",
+          scrollTrigger: {
+            trigger: ".story-timeline",
+            start: "top 65%",
+            end: "bottom 75%",
+            scrub: true,
+          },
+        }
+      );
+
+      gsap.utils.toArray(".story-timeline-row").forEach((row) => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: row, start: "top 85%" },
+        });
+
+        tl.fromTo(
+          row.querySelector(".story-timeline-dot"),
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.4)" },
+          0
+        )
+          .fromTo(
+            row.querySelector(".story-timeline-year"),
+            { opacity: 0, y: 14, filter: "blur(6px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out" },
+            0.05
+          )
+          .fromTo(
+            row.querySelector(".story-timeline-label"),
+            { opacity: 0, y: 14, filter: "blur(6px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out" },
+            0.14
+          );
       });
 
       gsap.fromTo(
@@ -272,8 +298,12 @@ export default function AboutPage() {
           </div>
 
           <div className="story-timeline">
+            <div className="story-timeline-line-track">
+              <div className="story-timeline-line" />
+            </div>
             {TIMELINE.map((t) => (
               <div className="story-timeline-row" key={t.year}>
+                <span className="story-timeline-dot" />
                 <span className="story-timeline-year">{t.year}</span>
                 <span className="story-timeline-label">{t.label}</span>
               </div>
