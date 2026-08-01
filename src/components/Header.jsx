@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { gsap } from "../lib/gsap";
 import useMagnetic from "../lib/useMagnetic";
 import logoMarkWhite from "../assets/logo-mark-white.png";
@@ -6,12 +7,12 @@ import logoMarkNavy from "../assets/logo-mark-navy.png";
 import "./Header.css";
 
 const NAV = [
-  { label: "Services", href: "#services" },
-  { label: "Marketing", href: "#marketing" },
-  { label: "Why M2", href: "#why" },
-  { label: "About", href: "#about" },
-  { label: "Leadership", href: "#leadership" },
-  { label: "Insights", href: "#testimonials" },
+  { label: "Services", to: "/#services" },
+  { label: "Marketing", to: "/#marketing" },
+  { label: "Why M2", to: "/#why" },
+  { label: "About", to: "/about" },
+  { label: "Leadership", to: "/#leadership" },
+  { label: "Insights", to: "/#testimonials" },
 ];
 
 export default function Header({ ready }) {
@@ -38,28 +39,28 @@ export default function Header({ ready }) {
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
       <div className="container header-inner">
-        <a href="#top" className="logo header-reveal">
+        <Link to="/" className="logo header-reveal">
           <img src={logoMarkWhite} alt="M2" className="logo-img logo-img-white" />
           <img src={logoMarkNavy} alt="M2" className="logo-img logo-img-navy" />
-        </a>
+        </Link>
 
         <nav className="main-nav header-reveal">
           <ul>
             {NAV.map((item) => (
-              <li key={item.href}>
-                <a href={item.href}>
+              <li key={item.to}>
+                <Link to={item.to}>
                   <span>{item.label}</span>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
 
         <div className="header-actions header-reveal">
-          <a href="#contact" className="btn btn-primary header-cta" ref={ctaRef}>
+          <Link to="/#contact" className="btn btn-primary header-cta" ref={ctaRef}>
             Book a Consultation
             <span className="btn-arrow">&#8599;</span>
-          </a>
+          </Link>
           <button
             className={`nav-burger ${open ? "is-open" : ""}`}
             aria-label="Toggle menu"
@@ -74,10 +75,10 @@ export default function Header({ ready }) {
       <div className={`mobile-nav ${open ? "is-open" : ""}`}>
         <ul>
           {NAV.map((item) => (
-            <li key={item.href}>
-              <a href={item.href} onClick={() => setOpen(false)}>
+            <li key={item.to}>
+              <Link to={item.to} onClick={() => setOpen(false)}>
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

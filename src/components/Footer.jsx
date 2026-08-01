@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { gsap } from "../lib/gsap";
 import logoWordmarkWhite from "../assets/logo-wordmark-white.png";
 import skylineLineart from "../assets/skyline-lineart.webp";
@@ -7,15 +8,29 @@ import "./Footer.css";
 const COLS = [
   {
     title: "Services",
-    links: ["Company Formation", "Virtual CFO", "M&A Advisory", "Tax & Compliance"],
+    links: [
+      { label: "Company Formation", to: "/#services" },
+      { label: "Virtual CFO", to: "/#services" },
+      { label: "M&A Advisory", to: "/#services" },
+      { label: "Tax & Compliance", to: "/#services" },
+    ],
   },
   {
     title: "Company",
-    links: ["About", "Leadership", "Insights", "Careers"],
+    links: [
+      { label: "About", to: "/about" },
+      { label: "Leadership", to: "/#leadership" },
+      { label: "Insights", to: "/#testimonials" },
+      { label: "Careers", to: "/#contact" },
+    ],
   },
   {
     title: "Contact",
-    links: ["Dubai, UAE", "hello@m2consultancy.ae", "+971 4 000 0000"],
+    links: [
+      { label: "Dubai, UAE", to: "/#contact" },
+      { label: "hello@m2consultancy.ae", href: "mailto:hello@m2consultancy.ae" },
+      { label: "+971 4 000 0000", href: "tel:+97140000000" },
+    ],
   },
 ];
 
@@ -53,8 +68,8 @@ export default function Footer() {
                 <h4>{col.title}</h4>
                 <ul>
                   {col.links.map((l) => (
-                    <li key={l}>
-                      <a href="#">{l}</a>
+                    <li key={l.label}>
+                      {l.to ? <Link to={l.to}>{l.label}</Link> : <a href={l.href}>{l.label}</a>}
                     </li>
                   ))}
                 </ul>

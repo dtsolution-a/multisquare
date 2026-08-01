@@ -1,27 +1,24 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../lib/gsap";
+import mukeshMPatel from "../assets/founder-mukesh-m-patel.webp";
+import mukeshKPatel from "../assets/founder-mukesh-k-patel.webp";
 import "./Leadership.css";
 
 const TEAM = [
   {
-    name: "Rashid Al Mansoori",
-    role: "Managing Partner",
-    quote: "Every mandate gets the same senior attention — no exceptions.",
+    name: "CA Mukesh M. Patel",
+    role: "Co-Founder",
+    credentials: "B.Com, FCA, CCCAB (ICAI)",
+    focus: "10+ years as a Chartered Accountant, specializing in financial intricacies and client-focused solutions.",
+    photo: mukeshMPatel,
   },
   {
-    name: "Elena Kovacs",
-    role: "Head of M&A",
-    quote: "Diligence is where value is protected, not just verified.",
-  },
-  {
-    name: "Farid Haidari",
-    role: "Director, Virtual CFO",
-    quote: "Clarity in the numbers is clarity in the decision.",
-  },
-  {
-    name: "Priya Nair",
-    role: "Head of Tax Advisory",
-    quote: "Compliance should be a strength, never an afterthought.",
+    name: "CA Mukesh K. Patel",
+    role: "Co-Founder",
+    credentials: "B.Com, FCA, DISA (ICAI), CCIDT (ICAI)",
+    focus: "10+ years in management consultancy, driving strategic financial solutions across diverse sectors.",
+    photo: mukeshKPatel,
   },
 ];
 
@@ -63,29 +60,37 @@ export default function Leadership() {
   return (
     <section className="leadership section-pad" id="leadership" ref={rootRef}>
       <div className="container">
-        <div className="section-head">
-          <p className="eyebrow">Leadership</p>
-          <h2 className="services-title">Senior advisors. Every mandate.</h2>
+        <div className="section-head leadership-head">
+          <div>
+            <p className="eyebrow">Leadership</p>
+            <h2 className="services-title">Founders behind every mandate.</h2>
+          </div>
+          <Link to="/about" className="btn btn-ghost leadership-more">
+            Full Profiles
+            <span className="btn-arrow">&#8599;</span>
+          </Link>
         </div>
 
-        <div className="leader-grid">
+        <div className="leader-grid leader-grid-founders">
           {TEAM.map((t) => (
             <article className="leader-card" key={t.name} onMouseMove={onMove}>
               <div className="leader-portrait">
+                <img src={t.photo} alt={t.name} className="leader-photo" />
                 <div className="leader-light" />
               </div>
               <div className="leader-quote">
                 <svg viewBox="0 0 32 24" className="quote-mark">
                   <path d="M0 24V13.5C0 5 5 0 13 0v5.5C8 5.5 5.5 8 5.5 13H13V24H0Zm18 0V13.5C18 5 23 0 31 0v5.5c-5 0-7.5 2.5-7.5 7.5H31V24H18Z" />
                 </svg>
-                <p>{t.quote}</p>
+                <p>{t.focus}</p>
               </div>
               <div className="leader-info">
                 <div>
                   <h3>{t.name}</h3>
                   <p>{t.role}</p>
+                  <p className="leader-credentials">{t.credentials}</p>
                 </div>
-                <a href="#" className="leader-linkedin" aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="leader-linkedin" aria-label="LinkedIn">
                   <span>in</span>
                 </a>
               </div>

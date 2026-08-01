@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import dubaiHighway from "../assets/dubai-highway.webp";
 import "./About.css";
@@ -92,6 +93,11 @@ export default function About() {
               </div>
             ))}
           </div>
+
+          <Link to="/about" className="btn btn-ghost about-more">
+            Our Full Story &amp; Founders
+            <span className="btn-arrow">&#8599;</span>
+          </Link>
         </div>
 
         <div className="about-media">

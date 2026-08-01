@@ -2,6 +2,10 @@
   background: var(--white);
 }
 
+.about-more {
+  margin-top: 40px;
+}
+
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
