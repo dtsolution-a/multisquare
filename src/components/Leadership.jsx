@@ -1,24 +1,26 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../lib/gsap";
-import mukeshMPatel from "../assets/founder-mukesh-m-patel.webp";
 import mukeshKPatel from "../assets/founder-mukesh-k-patel.webp";
+import mukeshMPatel from "../assets/founder-mukesh-m-patel.webp";
 import "./Leadership.css";
 
 const TEAM = [
-  {
-    name: "CA Mukesh M. Patel",
-    role: "Co-Founder",
-    credentials: "B.Com, FCA, CCCAB (ICAI)",
-    focus: "10+ years as a Chartered Accountant, specializing in financial intricacies and client-focused solutions.",
-    photo: mukeshMPatel,
-  },
   {
     name: "CA Mukesh K. Patel",
     role: "Co-Founder",
     credentials: "B.Com, FCA, DISA (ICAI), CCIDT (ICAI)",
     focus: "10+ years in management consultancy, driving strategic financial solutions across diverse sectors.",
     photo: mukeshKPatel,
+    linkedin: "https://www.linkedin.com/in/mukeshkpatel/",
+  },
+  {
+    name: "CA Mukesh M. Patel",
+    role: "Co-Founder",
+    credentials: "B.Com, FCA, CCCAB (ICAI)",
+    focus: "10+ years as a Chartered Accountant, specializing in financial intricacies and client-focused solutions.",
+    photo: mukeshMPatel,
+    linkedin: "https://www.linkedin.com/in/mukeshmpatel-b9733b217/",
   },
 ];
 
@@ -64,6 +66,10 @@ export default function Leadership() {
           <div>
             <p className="eyebrow">Leadership</p>
             <h2 className="services-title">Founders behind every mandate.</h2>
+            <p className="leadership-intro">
+              M2 is led directly by its two co-founders &mdash; every engagement gets
+              their senior attention, not a delegated hand-off.
+            </p>
           </div>
           <Link to="/about" className="btn btn-ghost leadership-more">
             Full Profiles
@@ -90,7 +96,7 @@ export default function Leadership() {
                   <p>{t.role}</p>
                   <p className="leader-credentials">{t.credentials}</p>
                 </div>
-                <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="leader-linkedin" aria-label="LinkedIn">
+                <a href={t.linkedin} target="_blank" rel="noreferrer" className="leader-linkedin" aria-label="LinkedIn">
                   <span>in</span>
                 </a>
               </div>

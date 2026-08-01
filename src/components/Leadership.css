@@ -10,6 +10,14 @@
   flex-wrap: wrap;
 }
 
+.leadership-intro {
+  margin-top: 16px;
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--grey-600);
+}
+
 .leadership-more {
   margin-bottom: 4px;
 }
@@ -22,7 +30,8 @@
 
 .leader-grid-founders {
   grid-template-columns: repeat(2, 1fr);
-  max-width: 900px;
+  gap: 40px;
+  margin-top: 60px;
 }
 
 .leader-card {

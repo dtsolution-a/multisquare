@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { gsap, ScrollTrigger } from "../lib/gsap";
+import { gsap, ScrollTrigger, SplitText } from "../lib/gsap";
 import dubaiHighway from "../assets/dubai-highway.webp";
 import abudhabiDusk from "../assets/abudhabi-dusk.webp";
-import mukeshMPatel from "../assets/founder-mukesh-m-patel.webp";
 import mukeshKPatel from "../assets/founder-mukesh-k-patel.webp";
+import mukeshMPatel from "../assets/founder-mukesh-m-patel.webp";
 import "./AboutPage.css";
 
 const TIMELINE = [
@@ -15,20 +15,39 @@ const TIMELINE = [
   { year: "2024", label: "150+ entities structured across 40+ jurisdictions." },
 ];
 
+const STATS = [
+  { target: 150, suffix: "+", label: "Entities structured" },
+  { target: 40, suffix: "+", label: "Jurisdictions covered" },
+  { target: 20, suffix: "+", label: "Years combined leadership experience" },
+  { target: 100, suffix: "%", label: "Founder-led engagements" },
+];
+
 const FOUNDERS = [
-  {
-    name: "CA Mukesh M. Patel",
-    role: "Co-Founder",
-    credentials: "B.Com, FCA, CCCAB (ICAI)",
-    photo: mukeshMPatel,
-    bio: "Mukesh M. Patel is the co-founder of MultiSquare Management Consultancy (M2) in Dubai. With over a decade of experience as a Chartered Accountant based in Halol, Gujarat, he brings a deep understanding of financial intricacies to every engagement. His commitment to client success has helped establish M2 as a trusted partner for businesses navigating complex financial landscapes across the UAE and beyond.",
-  },
   {
     name: "CA Mukesh K. Patel",
     role: "Co-Founder",
     credentials: "B.Com, FCA, DISA (ICAI), CCIDT (ICAI)",
     photo: mukeshKPatel,
+    linkedin: "https://www.linkedin.com/in/mukeshkpatel/",
+    journey: [
+      "Qualified as a Chartered Accountant and entered management consultancy.",
+      "10+ years advising businesses on strategic financial solutions.",
+      "Co-founded M2 in Dubai, 2014.",
+    ],
     bio: "Mukesh K. Patel is the co-founder of MultiSquare Management Consultancy (M2), based in Dubai. With over a decade of experience in management consultancy, he brings a wealth of strategic insight to financial advisory. His leadership has helped M2 become a trusted name in the industry, known for delivering strategic financial solutions and unparalleled client service across diverse sectors.",
+  },
+  {
+    name: "CA Mukesh M. Patel",
+    role: "Co-Founder",
+    credentials: "B.Com, FCA, CCCAB (ICAI)",
+    photo: mukeshMPatel,
+    linkedin: "https://www.linkedin.com/in/mukeshmpatel-b9733b217/",
+    journey: [
+      "Began his career as a Chartered Accountant in Halol, Gujarat.",
+      "10+ years mastering financial intricacies across industries.",
+      "Co-founded M2 in Dubai, 2014.",
+    ],
+    bio: "Mukesh M. Patel is the co-founder of MultiSquare Management Consultancy (M2) in Dubai. With over a decade of experience as a Chartered Accountant based in Halol, Gujarat, he brings a deep understanding of financial intricacies to every engagement. His commitment to client success has helped establish M2 as a trusted partner for businesses navigating complex financial landscapes across the UAE and beyond.",
   },
 ];
 
@@ -37,6 +56,7 @@ export default function AboutPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    const splits = [];
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -98,38 +118,101 @@ export default function AboutPage() {
         }
       );
 
+      // Stats band
+      gsap.utils.toArray(".about-stat").forEach((stat, i) => {
+        gsap.fromTo(
+          stat,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: i * 0.08,
+            ease: "power3.out",
+            scrollTrigger: { trigger: ".about-stats", start: "top 85%" },
+          }
+        );
+
+        const numEl = stat.querySelector(".about-stat-num");
+        const target = parseFloat(numEl.dataset.target);
+        const suffix = numEl.dataset.suffix || "";
+        const counter = { val: 0 };
+        gsap.to(counter, {
+          val: target,
+          duration: 1.4,
+          ease: "power2.out",
+          scrollTrigger: { trigger: ".about-stats", start: "top 85%" },
+          onUpdate: () => {
+            numEl.textContent = `${Math.round(counter.val)}${suffix}`;
+          },
+        });
+      });
+
+      // Founders — each row plays as its own sequenced "journey" reveal,
+      // not everything appearing at once.
       gsap.utils.toArray(".founder-row").forEach((row) => {
         const mask = row.querySelector(".founder-mask");
         const photo = row.querySelector(".founder-photo");
+        const bioEl = row.querySelector(".founder-bio");
+        const journeyLine = row.querySelector(".founder-journey-line");
+        const journeySteps = row.querySelectorAll(".founder-journey-step");
 
-        gsap.fromTo(
-          mask,
-          { clipPath: "inset(0 0 100% 0)" },
-          {
-            clipPath: "inset(0 0 0% 0)",
-            duration: 1.3,
-            ease: "power4.inOut",
-            scrollTrigger: { trigger: row, start: "top 75%" },
-          }
-        );
+        const split = new SplitText(bioEl, { type: "lines", linesClass: "split-line" });
+        splits.push(split);
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: row, start: "top 78%" },
+        });
+
+        tl.fromTo(
+          row.querySelector(".founder-eyebrow"),
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+          0
+        )
+          .fromTo(
+            row.querySelector(".founder-copy h3"),
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+            0.08
+          )
+          .fromTo(
+            mask,
+            { clipPath: "inset(0 0 100% 0)" },
+            { clipPath: "inset(0 0 0% 0)", duration: 1.3, ease: "power4.inOut" },
+            0.15
+          )
+          .fromTo(
+            row.querySelector(".founder-credentials"),
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, duration: 0.5 },
+            0.4
+          )
+          .fromTo(journeyLine, { scaleY: 0 }, { scaleY: 1, duration: 1, ease: "power2.inOut" }, 0.55)
+          .fromTo(
+            journeySteps,
+            { opacity: 0, x: -16 },
+            { opacity: 1, x: 0, duration: 0.6, stagger: 0.22, ease: "power3.out" },
+            0.65
+          )
+          .fromTo(
+            split.lines,
+            { opacity: 0, y: 14, filter: "blur(4px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, stagger: 0.05, ease: "power3.out" },
+            1.25
+          )
+          .fromTo(
+            row.querySelector(".founder-linkedin"),
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+            1.55
+          );
 
         gsap.to(photo, {
           scale: 1.14,
           ease: "none",
           scrollTrigger: { trigger: row, start: "top bottom", end: "bottom top", scrub: true },
         });
-
-        gsap.fromTo(
-          row.querySelector(".founder-copy"),
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: { trigger: row, start: "top 72%" },
-          }
-        );
       });
 
       gsap.fromTo(
@@ -145,7 +228,10 @@ export default function AboutPage() {
       );
     }, rootRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      splits.forEach((s) => s.revert());
+    };
   }, []);
 
   return (
@@ -196,6 +282,19 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="about-stats">
+        <div className="container about-stats-grid">
+          {STATS.map((s) => (
+            <div className="about-stat" key={s.label}>
+              <span className="about-stat-num" data-target={s.target} data-suffix={s.suffix}>
+                0{s.suffix}
+              </span>
+              <span className="about-stat-label">{s.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="section-pad founders-section" id="founders">
         <div className="container">
           <div className="section-head">
@@ -211,12 +310,25 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="founder-copy">
+                <p className="founder-eyebrow eyebrow">{f.role}</p>
                 <h3>{f.name}</h3>
-                <p className="founder-role">{f.role}</p>
                 <p className="founder-credentials">{f.credentials}</p>
+
+                <div className="founder-journey">
+                  <div className="founder-journey-line-track">
+                    <div className="founder-journey-line" />
+                  </div>
+                  {f.journey.map((step, si) => (
+                    <div className="founder-journey-step" key={si}>
+                      <span className="founder-journey-dot" />
+                      <p>{step}</p>
+                    </div>
+                  ))}
+                </div>
+
                 <p className="founder-bio">{f.bio}</p>
                 <a
-                  href="https://www.linkedin.com/"
+                  href={f.linkedin}
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-ghost founder-linkedin"
