@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import dubaiDuskBurj from "../assets/dubai-dusk-burj.webp";
@@ -178,15 +178,13 @@ export default function ServicesPage() {
   const location = useLocation();
   const initialSlug = location.hash?.replace("#", "");
   const hasValidHash = ALL_SERVICES.some((s) => s.slug === initialSlug);
-  const [openSlug, setOpenSlug] = useState(hasValidHash ? initialSlug : ALL_SERVICES[0].slug);
-
-  useEffect(() => {
-    if (hasValidHash) setOpenSlug(initialSlug);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.hash]);
 
   useEffect(() => {
     if (!hasValidHash) window.scrollTo(0, 0);
+
+    const smallScreen = window.matchMedia("(max-width: 900px)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canPin = !smallScreen && !reduced;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -244,20 +242,54 @@ export default function ServicesPage() {
             scrollTrigger: { trigger: cat, start: "top 82%" },
           }
         );
+      });
 
-        gsap.utils.toArray(cat.querySelectorAll(".sv-item")).forEach((item, i) => {
-          gsap.fromTo(
-            item,
-            { opacity: 0, y: 40 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              delay: i * 0.06,
-              ease: "power3.out",
-              scrollTrigger: { trigger: item, start: "top 90%" },
-            }
-          );
+      // Each service card grows from a compact card to a fullscreen panel as
+      // you scroll through it — same card-to-fullscreen mechanic as the
+      // Marketing section — then releases into the next one.
+      gsap.utils.toArray(".sv-pin-wrap").forEach((pinWrap) => {
+        const panel = pinWrap.querySelector(".sv-panel");
+        const head = panel.querySelector(".sv-panel-head");
+        const body = panel.querySelector(".sv-panel-body");
+
+        gsap.fromTo(
+          head,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: { trigger: pinWrap, start: "top 82%" },
+          }
+        );
+
+        if (!canPin) return;
+
+        const measure = () => {
+          gsap.set(panel, { clearProps: "width,height" });
+          const rect = panel.getBoundingClientRect();
+          gsap.set(panel, { width: rect.width, height: rect.height, borderRadius: 28 });
+        };
+        measure();
+
+        ScrollTrigger.create({
+          trigger: pinWrap,
+          start: "top top",
+          end: "+=900",
+          scrub: 1,
+          pin: true,
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+          onRefreshInit: measure,
+          animation: gsap
+            .timeline()
+            .to(
+              panel,
+              { width: () => window.innerWidth, height: () => window.innerHeight, borderRadius: 0, ease: "none" },
+              0
+            )
+            .fromTo(body, { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: "none" }, 0.42),
         });
       });
 
@@ -276,8 +308,6 @@ export default function ServicesPage() {
 
     return () => ctx.revert();
   }, []);
-
-  const toggle = (slug) => setOpenSlug((cur) => (cur === slug ? null : slug));
 
   return (
     <div className="services-page" ref={rootRef}>
@@ -302,8 +332,8 @@ export default function ServicesPage() {
       </section>
 
       {CATEGORIES.map((cat) => (
-        <section className="section-pad sv-category" key={cat.label}>
-          <div className="container">
+        <section className="sv-category" key={cat.label}>
+          <div className="container sv-category-head-wrap">
             <div className="section-head sv-category-head">
               <div>
                 <p className="eyebrow">{cat.label}</p>
@@ -312,63 +342,54 @@ export default function ServicesPage() {
                 </h2>
               </div>
             </div>
-
-            <div className="sv-list">
-              {cat.services.map((s, i) => {
-                const open = openSlug === s.slug;
-                return (
-                  <article className={`sv-item ${open ? "is-open" : ""}`} key={s.slug} id={s.slug}>
-                    <button className="sv-item-head" onClick={() => toggle(s.slug)}>
-                      <span className="sv-item-icon-wrap">
-                        <svg className="sv-item-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.4">
-                          {ICONS[s.icon]}
-                        </svg>
-                      </span>
-                      <span className="sv-item-heading">
-                        <span className="sv-item-n">{String(i + 1).padStart(2, "0")}</span>
-                        <span className="sv-item-title">{s.title}</span>
-                        <span className="sv-item-summary">{s.summary}</span>
-                      </span>
-                      <span className="sv-item-toggle" aria-hidden="true">
-                        <span />
-                        <span />
-                      </span>
-                    </button>
-
-                    <div className="sv-item-body">
-                      <div className="sv-item-body-inner">
-                        <div className="sv-item-groups">
-                          {s.groups.map((g) => (
-                            <div className="sv-item-group" key={g.heading}>
-                              <h4>{g.heading}</h4>
-                              <ul>
-                                {g.items.map((it) => (
-                                  <li key={it}>{it}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="sv-item-benefits">
-                          <h4>Why it matters</h4>
-                          <ul>
-                            {s.benefits.map((b) => (
-                              <li key={b}>{b}</li>
-                            ))}
-                          </ul>
-                          <Link to="/#contact" className="btn btn-primary sv-item-cta">
-                            Discuss This Service
-                            <span className="btn-arrow">&#8599;</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
           </div>
+
+          {cat.services.map((s, i) => (
+            <div className="sv-pin-wrap" key={s.slug}>
+              <div className="sv-panel" id={s.slug}>
+                <div className="sv-panel-head">
+                  <span className="sv-panel-icon-wrap">
+                    <svg className="sv-panel-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.4">
+                      {ICONS[s.icon]}
+                    </svg>
+                  </span>
+                  <div className="sv-panel-head-text">
+                    <span className="sv-panel-n">{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className="sv-panel-title">{s.title}</h3>
+                    <p className="sv-panel-summary">{s.summary}</p>
+                  </div>
+                </div>
+
+                <div className="sv-panel-body">
+                  <div className="sv-panel-groups">
+                    {s.groups.map((g) => (
+                      <div className="sv-panel-group" key={g.heading}>
+                        <h4>{g.heading}</h4>
+                        <ul>
+                          {g.items.map((it) => (
+                            <li key={it}>{it}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="sv-panel-benefits">
+                    <h4>Why it matters</h4>
+                    <ul>
+                      {s.benefits.map((b) => (
+                        <li key={b}>{b}</li>
+                      ))}
+                    </ul>
+                    <Link to="/#contact" className="btn btn-primary sv-panel-cta">
+                      Discuss This Service
+                      <span className="btn-arrow">&#8599;</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </section>
       ))}
 

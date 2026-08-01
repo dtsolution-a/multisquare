@@ -75,8 +75,12 @@
   background: var(--grey-100);
 }
 
+.sv-category-head-wrap {
+  padding: clamp(70px, 9vw, 120px) 0 clamp(50px, 6vw, 70px);
+}
+
 .sv-category-head {
-  margin-bottom: 50px;
+  margin-bottom: 0;
 }
 
 .sv-category-heading {
@@ -87,152 +91,90 @@
   max-width: 60ch;
 }
 
-/* ---------- Accordion list ---------- */
+/* ---------- Expanding service cards ---------- */
 
-.sv-list {
-  border-top: 1px solid var(--grey-200);
-}
-
-.sv-item {
-  border-bottom: 1px solid var(--grey-200);
-}
-
-.sv-item-head {
+.sv-pin-wrap {
+  position: relative;
   width: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  height: 100vh;
+  display: flex;
   align-items: center;
-  gap: 26px;
-  padding: 30px 0;
-  text-align: left;
-  cursor: pointer;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.sv-item-icon-wrap {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+.sv-panel {
+  position: relative;
+  width: min(920px, calc(100vw - clamp(48px, 8vw, 140px)));
+  border-radius: 28px;
+  background: var(--white);
+  border: 1px solid var(--grey-200);
+  box-shadow: 0 40px 90px -40px rgba(10, 14, 26, 0.18);
+  overflow: hidden;
+  will-change: width, height, border-radius;
+  padding: clamp(40px, 5vw, 72px);
+}
+
+.sv-panel-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.sv-panel-icon-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--blue-50);
   color: var(--blue-600);
-  transition: background 0.4s var(--ease-soft), color 0.4s var(--ease-soft), transform 0.4s var(--ease-lux);
   flex-shrink: 0;
 }
 
-.sv-item.is-open .sv-item-icon-wrap {
-  background: var(--blue-600);
-  color: var(--white);
-  transform: rotate(-6deg);
+.sv-panel-icon {
+  width: 28px;
+  height: 28px;
 }
 
-.sv-item-icon {
-  width: 26px;
-  height: 26px;
-}
-
-.sv-item-heading {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: baseline;
-  column-gap: 16px;
-  row-gap: 4px;
-}
-
-.sv-item-n {
+.sv-panel-n {
+  display: block;
   font-size: 12.5px;
   font-weight: 600;
   color: var(--grey-400);
   letter-spacing: 0.05em;
+  margin-bottom: 8px;
 }
 
-.sv-item-title {
-  font-family: var(--font-display);
-  font-size: clamp(18px, 2vw, 23px);
-  font-weight: 600;
-  color: var(--ink);
+.sv-panel-title {
+  font-size: clamp(22px, 3vw, 32px);
 }
 
-.sv-item-summary {
-  grid-column: 2 / 3;
-  font-size: 14px;
-  line-height: 1.6;
+.sv-panel-summary {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.65;
   color: var(--grey-600);
   max-width: 62ch;
 }
 
-.sv-item-toggle {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--grey-200);
-  flex-shrink: 0;
-  transition: border-color 0.4s var(--ease-soft);
-}
-
-.sv-item.is-open .sv-item-toggle {
-  border-color: var(--blue-600);
-}
-
-.sv-item-toggle span {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background: var(--ink);
-  transition: transform 0.5s var(--ease-lux), background 0.4s var(--ease-soft);
-}
-
-.sv-item-toggle span:first-child {
-  width: 12px;
-  height: 1.5px;
-  transform: translate(-50%, -50%);
-}
-
-.sv-item-toggle span:last-child {
-  width: 1.5px;
-  height: 12px;
-  transform: translate(-50%, -50%);
-}
-
-.sv-item.is-open .sv-item-toggle span {
-  background: var(--blue-600);
-}
-
-.sv-item.is-open .sv-item-toggle span:last-child {
-  transform: translate(-50%, -50%) rotate(90deg) scale(0);
-}
-
-.sv-item-body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.6s var(--ease-lux);
-}
-
-.sv-item.is-open .sv-item-body {
-  grid-template-rows: 1fr;
-}
-
-.sv-item-body-inner {
-  overflow: hidden;
-  min-height: 0;
-}
-
-.sv-item-body-inner > div {
-  padding: 6px 0 40px 78px;
+.sv-panel-body {
+  margin-top: clamp(30px, 4vw, 50px);
+  padding-top: clamp(30px, 4vw, 50px);
+  border-top: 1px solid var(--grey-200);
   display: grid;
   grid-template-columns: 1.4fr 0.9fr;
   gap: 50px;
 }
 
-.sv-item-groups {
+.sv-panel-groups {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 28px;
 }
 
-.sv-item-group h4 {
+.sv-panel-group h4 {
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -241,13 +183,13 @@
   margin-bottom: 12px;
 }
 
-.sv-item-group ul {
+.sv-panel-group ul {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.sv-item-group li {
+.sv-panel-group li {
   position: relative;
   padding-left: 16px;
   font-size: 13.5px;
@@ -255,7 +197,7 @@
   color: var(--grey-600);
 }
 
-.sv-item-group li::before {
+.sv-panel-group li::before {
   content: "";
   position: absolute;
   left: 0;
@@ -266,14 +208,14 @@
   background: var(--blue-500);
 }
 
-.sv-item-benefits {
+.sv-panel-benefits {
   padding: 22px 24px;
   border-radius: 18px;
   background: var(--grey-100);
   align-self: start;
 }
 
-.sv-item-benefits h4 {
+.sv-panel-benefits h4 {
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -282,14 +224,14 @@
   margin-bottom: 14px;
 }
 
-.sv-item-benefits ul {
+.sv-panel-benefits ul {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 22px;
 }
 
-.sv-item-benefits li {
+.sv-panel-benefits li {
   position: relative;
   padding-left: 18px;
   font-size: 13.5px;
@@ -297,7 +239,7 @@
   color: var(--ink);
 }
 
-.sv-item-benefits li::before {
+.sv-panel-benefits li::before {
   content: "\2713";
   position: absolute;
   left: 0;
@@ -306,7 +248,7 @@
   color: var(--blue-600);
 }
 
-.sv-item-cta {
+.sv-panel-cta {
   width: 100%;
   justify-content: center;
   padding: 14px 24px;
@@ -314,25 +256,16 @@
 }
 
 @media (max-width: 900px) {
-  .sv-item-head {
-    grid-template-columns: auto 1fr;
+  .sv-pin-wrap {
+    height: auto;
+    padding: 24px 0;
   }
-  .sv-item-toggle {
-    grid-column: 2 / 3;
-    justify-self: end;
-    margin-top: -46px;
+  .sv-panel {
+    width: 100%;
+    padding: 32px 26px;
   }
-  .sv-item-heading {
-    grid-template-columns: 1fr;
-  }
-  .sv-item-summary {
-    grid-column: 1 / 2;
-  }
-  .sv-item-body-inner > div {
-    padding-left: 0;
-    grid-template-columns: 1fr;
-  }
-  .sv-item-groups {
+  .sv-panel-body,
+  .sv-panel-groups {
     grid-template-columns: 1fr;
   }
 }
