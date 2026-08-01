@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import dubaiDuskBurj from "../assets/dubai-dusk-burj.webp";
@@ -178,6 +178,15 @@ export default function ServicesPage() {
   const location = useLocation();
   const initialSlug = location.hash?.replace("#", "");
   const hasValidHash = ALL_SERVICES.some((s) => s.slug === initialSlug);
+  const [activeSlug, setActiveSlug] = useState(ALL_SERVICES[0].slug);
+
+  const jumpTo = (slug) => {
+    const el = document.getElementById(slug);
+    if (!el) return;
+    const lenis = window.__lenis;
+    if (lenis) lenis.scrollTo(el, { offset: -20 });
+    else el.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (!hasValidHash) window.scrollTo(0, 0);
@@ -244,6 +253,22 @@ export default function ServicesPage() {
         );
       });
 
+      gsap.utils.toArray(".sv-overview-card").forEach((card, i) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 30, filter: "blur(6px)" },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.8,
+            delay: i * 0.06,
+            ease: "power3.out",
+            scrollTrigger: { trigger: card, start: "top 92%" },
+          }
+        );
+      });
+
       // Each service card grows from a compact card to a fullscreen panel as
       // you scroll through it — same card-to-fullscreen mechanic as the
       // Marketing section — then releases into the next one.
@@ -263,6 +288,15 @@ export default function ServicesPage() {
             scrollTrigger: { trigger: pinWrap, start: "top 82%" },
           }
         );
+
+        ScrollTrigger.create({
+          trigger: pinWrap,
+          start: "top center",
+          end: "bottom center",
+          onToggle: (self) => {
+            if (self.isActive) setActiveSlug(panel.id);
+          },
+        });
 
         if (!canPin) return;
 
@@ -330,6 +364,58 @@ export default function ServicesPage() {
           </p>
         </div>
       </section>
+
+      <section className="section-pad sv-overview">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">All Services</p>
+            <h2 className="services-title">Nine services, one click away.</h2>
+            <p className="sv-overview-lede">
+              Browse the full list now, or scroll on to see each in detail
+              &mdash; jump straight to any of them at any time.
+            </p>
+          </div>
+
+          <div className="sv-overview-grid">
+            {ALL_SERVICES.map((s, i) => (
+              <button className="sv-overview-card" key={s.slug} onClick={() => jumpTo(s.slug)}>
+                <div className="sv-overview-top">
+                  <span className="sv-overview-n">{String(i + 1).padStart(2, "0")}</span>
+                  <svg className="sv-overview-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.4">
+                    {ICONS[s.icon]}
+                  </svg>
+                </div>
+                <h4>{s.title}</h4>
+                <p>{s.summary}</p>
+                <span className="sv-overview-arrow">
+                  Jump to service <span className="btn-arrow">&#8599;</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <nav className="sv-railnav" aria-label="Jump to a service">
+        <div className="sv-railnav-track">
+          <div
+            className="sv-railnav-fill"
+            style={{
+              height: `${(ALL_SERVICES.findIndex((s) => s.slug === activeSlug) / (ALL_SERVICES.length - 1)) * 100}%`,
+            }}
+          />
+        </div>
+        {ALL_SERVICES.map((s) => (
+          <button
+            key={s.slug}
+            className={`sv-railnav-item ${activeSlug === s.slug ? "is-active" : ""}`}
+            onClick={() => jumpTo(s.slug)}
+          >
+            <span className="sv-railnav-dot" />
+            <span className="sv-railnav-label">{s.title}</span>
+          </button>
+        ))}
+      </nav>
 
       {CATEGORIES.map((cat) => (
         <section className="sv-category" key={cat.label}>
