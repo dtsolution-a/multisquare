@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import AboutPage from "./pages/AboutPage";
 import ServicesPage from "./pages/ServicesPage";
 import InsightsPage from "./pages/InsightsPage";
+import PostPage from "./pages/PostPage";
 
 function App() {
   const [ready, setReady] = useState(false);
@@ -25,6 +26,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/insights" element={<InsightsPage />} />
+          <Route path="/insights/:slug" element={<PostPage />} />
         </Routes>
       </main>
       <Footer />

@@ -2,79 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import { ICONS } from "../lib/serviceIcons";
+import { CATEGORIES, POSTS } from "../lib/blogPosts";
 import abudhabiDusk from "../assets/abudhabi-dusk.webp";
-import dubaiHighway from "../assets/dubai-highway.webp";
 import "./InsightsPage.css";
-
-const CATEGORIES = ["All", "Business Setup", "Tax & Compliance", "Financial Advisory", "M&A"];
-
-const POSTS = [
-  {
-    slug: "mainland-vs-freezone-2025",
-    category: "Business Setup",
-    icon: "registration",
-    title: "Mainland vs Free Zone: Choosing the Right Structure for 2025",
-    excerpt: "Ownership rules, market access and licensing costs have all shifted in the last two years — here's how to weigh the decision properly.",
-    date: "Jan 2026",
-    readTime: "6 min read",
-    featured: true,
-    photo: dubaiHighway,
-  },
-  {
-    slug: "uae-corporate-tax-sme-guide",
-    category: "Tax & Compliance",
-    icon: "compliance",
-    title: "UAE Corporate Tax: What Every SME Needs to Know",
-    excerpt: "A practical breakdown of thresholds, exemptions and filing obligations for small and mid-sized businesses operating in the UAE.",
-    date: "Dec 2025",
-    readTime: "8 min read",
-  },
-  {
-    slug: "when-to-hire-a-virtual-cfo",
-    category: "Financial Advisory",
-    icon: "vcfo",
-    title: "When Does a Growing Business Need a Virtual CFO?",
-    excerpt: "The signs that your finance function has outgrown a bookkeeper — and what institutional-grade oversight actually looks like.",
-    date: "Dec 2025",
-    readTime: "5 min read",
-  },
-  {
-    slug: "due-diligence-red-flags",
-    category: "M&A",
-    icon: "diligence",
-    title: "Due Diligence Red Flags Every Acquirer Should Watch For",
-    excerpt: "The liabilities and disclosures that most often get missed in a rushed deal — and how a structured diligence process catches them.",
-    date: "Nov 2025",
-    readTime: "7 min read",
-  },
-  {
-    slug: "country-by-country-reporting-deadlines",
-    category: "Tax & Compliance",
-    icon: "cbcr",
-    title: "Country-by-Country Reporting: Are You Ready for the Deadlines?",
-    excerpt: "A checklist for multinational groups on scope, thresholds and what jurisdiction-by-jurisdiction disclosure actually requires.",
-    date: "Nov 2025",
-    readTime: "6 min read",
-  },
-  {
-    slug: "debt-vs-equity-structuring",
-    category: "Financial Advisory",
-    icon: "structuring",
-    title: "Debt vs Equity: Structuring Capital for Sustainable Growth",
-    excerpt: "Why the right financing mix depends less on cost of capital and more on how much control you're willing to give up.",
-    date: "Oct 2025",
-    readTime: "6 min read",
-  },
-  {
-    slug: "startup-scaling-signals",
-    category: "Business Setup",
-    icon: "startup",
-    title: "5 Signs Your Start-Up Needs Advisory Support Before Scaling",
-    excerpt: "Growth exposes gaps fast. Here's what to have in place before headcount or revenue doubles.",
-    date: "Oct 2025",
-    readTime: "5 min read",
-  },
-];
 
 export default function InsightsPage() {
   const rootRef = useRef(null);
@@ -187,7 +117,7 @@ export default function InsightsPage() {
       <section className="section-pad insights-body">
         <div className="container">
           {featured && (
-            <Link to="#" className="featured-post" onClick={(e) => e.preventDefault()}>
+            <Link to={`/insights/${featured.slug}`} className="featured-post">
               <div className="featured-post-media">
                 <img src={featured.photo} alt="" />
               </div>
@@ -221,7 +151,7 @@ export default function InsightsPage() {
 
           <div className="post-grid">
             {rest.map((p) => (
-              <Link to="#" className="post-card" key={p.slug} onClick={(e) => e.preventDefault()}>
+              <Link to={`/insights/${p.slug}`} className="post-card" key={p.slug}>
                 <div className={`post-card-media post-card-media-${p.icon}`}>
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.4">
                     {ICONS[p.icon]}

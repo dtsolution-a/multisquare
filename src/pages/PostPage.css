@@ -1,0 +1,146 @@
+.post-page {
+  background: var(--white);
+}
+
+.post-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--blue-600);
+  z-index: 600;
+  transform: scaleX(0);
+}
+
+/* ---------- Not found ---------- */
+
+.post-not-found {
+  padding: 220px 0 160px;
+  text-align: center;
+}
+
+.post-not-found h1 {
+  margin-top: 18px;
+  font-size: clamp(28px, 4vw, 42px);
+}
+
+.post-not-found p {
+  margin: 18px auto 30px;
+  max-width: 44ch;
+  color: var(--grey-600);
+}
+
+/* ---------- Hero ---------- */
+
+.post-hero {
+  padding-top: 150px;
+  padding-bottom: 50px;
+}
+
+.post-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--grey-600);
+  margin-bottom: 30px;
+  transition: color 0.4s var(--ease-soft);
+}
+
+.post-back:hover {
+  color: var(--blue-600);
+}
+
+.post-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--grey-400);
+  margin-bottom: 20px;
+}
+
+.post-hero-title {
+  font-size: clamp(28px, 4.6vw, 54px);
+  max-width: 18ch;
+}
+
+.post-hero-media {
+  position: relative;
+  margin-top: 46px;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+}
+
+.post-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Article body ---------- */
+
+.post-article-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.post-disclaimer {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--grey-100);
+  color: var(--grey-600);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: clamp(40px, 6vw, 64px);
+}
+
+.post-section {
+  margin-bottom: clamp(36px, 5vw, 54px);
+}
+
+.post-section h2 {
+  font-size: clamp(20px, 2.4vw, 26px);
+  margin-bottom: 18px;
+}
+
+.post-section p {
+  color: var(--grey-600);
+  font-size: 16px;
+  line-height: 1.85;
+  margin-bottom: 16px;
+}
+
+.post-section p:last-child {
+  margin-bottom: 0;
+}
+
+.post-article-cta {
+  margin-top: clamp(50px, 6vw, 80px);
+  padding: clamp(28px, 4vw, 40px);
+  border-radius: 20px;
+  background: var(--grey-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.post-article-cta h3 {
+  font-size: 18px;
+}
+
+.post-article-cta p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--grey-600);
+}
+
+/* ---------- Related ---------- */
+
+.related-section {
+  background: var(--grey-100);
+}
