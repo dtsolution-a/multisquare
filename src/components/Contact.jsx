@@ -102,6 +102,15 @@ export default function Contact() {
         ease: "none",
         scrollTrigger: { trigger: ".contact-map", start: "top bottom", end: "bottom top", scrub: true },
       });
+
+      gsap.to(".contact-form-blob", {
+        x: "-=26",
+        y: "+=20",
+        duration: 6,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
     }, rootRef);
     return () => ctx.revert();
   }, []);
@@ -163,6 +172,23 @@ export default function Contact() {
         </div>
 
         <div className="contact-form-wrap">
+          <div className="contact-form-blob" aria-hidden="true" />
+          <svg className="contact-form-watermark" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.1" aria-hidden="true">
+            <path d="M4 7h24v18H4V7Z M4 7l12 10L28 7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+
+          <div className="contact-form-head">
+            <span className="contact-form-icon">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M4 7h24v18H4V7Z M4 7l12 10L28 7" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div>
+              <h3>Send us a message</h3>
+              <p>We reply personally &mdash; usually within one business day.</p>
+            </div>
+          </div>
+
           <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
             {FIELDS.map((f) => (
               <div className="field contact-form-el" key={f.name}>
