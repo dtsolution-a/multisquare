@@ -300,6 +300,24 @@ export default function ServicesPage() {
 
         if (!canPin) return;
 
+        // The body (groups + benefits) is still opacity:0 above, but an
+        // invisible element still reserves its full layout height — which
+        // made every resting card as tall as its fully expanded content.
+        // Collapse it out of flow so the resting card is head-height only.
+        const bodyStyle = getComputedStyle(body);
+        const bodyMarginTop = bodyStyle.marginTop;
+        const bodyPaddingTop = bodyStyle.paddingTop;
+        const bodyBorderTop = bodyStyle.borderTopWidth;
+        gsap.set(body, {
+          maxHeight: 0,
+          opacity: 0,
+          y: 30,
+          overflow: "hidden",
+          marginTop: 0,
+          paddingTop: 0,
+          borderTopWidth: 0,
+        });
+
         const measure = () => {
           gsap.set(panel, { clearProps: "width,height" });
           const rect = panel.getBoundingClientRect();
@@ -323,7 +341,19 @@ export default function ServicesPage() {
               { width: () => window.innerWidth, height: () => window.innerHeight, borderRadius: 0, ease: "none" },
               0
             )
-            .fromTo(body, { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: "none" }, 0.42),
+            .to(
+              body,
+              {
+                maxHeight: 3000,
+                opacity: 1,
+                y: 0,
+                marginTop: bodyMarginTop,
+                paddingTop: bodyPaddingTop,
+                borderTopWidth: bodyBorderTop,
+                ease: "none",
+              },
+              0.42
+            ),
         });
       });
 
