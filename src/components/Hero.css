@@ -218,7 +218,65 @@
 }
 
 @media (max-width: 900px) {
+  .hero-inner {
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
+  .hero-logo {
+    width: clamp(130px, 30vw, 190px);
+    margin-bottom: 18px;
+  }
+  .hero-eyebrow {
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-size: clamp(28px, 8vw, 46px);
+  }
+  .hero-sub {
+    margin-top: 18px;
+    font-size: 15px;
+  }
+  .hero-cta-row {
+    margin-top: 26px;
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
   .hero-form {
+    margin-top: 32px;
     grid-template-columns: 1fr;
+  }
+  .hero-scroll-cue {
+    display: none;
+  }
+}
+
+/* Short viewports (small laptops, landscape tablets) — same width tier as
+   desktop, but not enough vertical room for the full stack. */
+@media (min-width: 901px) and (max-height: 820px) {
+  .hero-inner {
+    padding-top: 90px;
+    padding-bottom: 30px;
+  }
+  .hero-logo {
+    width: clamp(120px, 12vw, 170px);
+    margin-bottom: 18px;
+  }
+  .hero-eyebrow {
+    margin-bottom: 14px;
+  }
+  .hero-title {
+    font-size: clamp(30px, 4.6vw, 60px);
+  }
+  .hero-sub {
+    margin-top: 16px;
+  }
+  .hero-cta-row {
+    margin-top: 22px;
+  }
+  .hero-form {
+    margin-top: 28px;
+  }
+  .hero-scroll-cue {
+    display: none;
   }
 }
