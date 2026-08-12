@@ -22,7 +22,7 @@ const COLS = [
     links: [
       { label: "About", to: "/about" },
       { label: "Leadership", to: "/#leadership" },
-      { label: "Insights", to: "/#testimonials" },
+      { label: "Insights", to: "/insights" },
       { label: "Careers", to: "/#contact" },
     ],
   },

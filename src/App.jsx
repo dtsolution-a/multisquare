@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import AboutPage from "./pages/AboutPage";
 import ServicesPage from "./pages/ServicesPage";
+import InsightsPage from "./pages/InsightsPage";
 
 function App() {
   const [ready, setReady] = useState(false);
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Home ready={ready} />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/insights" element={<InsightsPage />} />
         </Routes>
       </main>
       <Footer />

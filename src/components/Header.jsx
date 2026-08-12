@@ -12,7 +12,7 @@ const NAV = [
   { label: "Why M2", to: "/#why" },
   { label: "About", to: "/about" },
   { label: "Leadership", to: "/#leadership" },
-  { label: "Insights", to: "/#testimonials" },
+  { label: "Insights", to: "/insights" },
 ];
 
 export default function Header({ ready }) {
