@@ -56,6 +56,7 @@
 
 .leader-portrait {
   position: relative;
+  width: 100%;
   aspect-ratio: 3 / 3.4;
   overflow: hidden;
   background: linear-gradient(150deg, #0c1c4d, #1a3fd6 60%, #4a63e8);
