@@ -1,9 +1,26 @@
 .contact {
   background: var(--white);
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.contact-bg-blob {
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  max-width: 700px;
+  max-height: 700px;
+  background: radial-gradient(closest-side, rgba(26, 63, 214, 0.06), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .contact-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 70px;
@@ -23,13 +40,96 @@
   max-width: 42ch;
 }
 
+/* ---------- Contact info ---------- */
+
+.contact-info {
+  margin-top: 40px;
+  border-top: 1px solid var(--grey-200);
+}
+
+.contact-info-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--grey-200);
+  color: var(--ink);
+}
+
+a.contact-info-row {
+  transition: gap 0.4s var(--ease-lux);
+}
+
+a.contact-info-row:hover {
+  gap: 24px;
+}
+
+a.contact-info-row:hover .contact-info-icon {
+  background: var(--blue-600);
+  color: var(--white);
+}
+
+.contact-info-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue-50);
+  color: var(--blue-600);
+  transition: background 0.4s var(--ease-soft), color 0.4s var(--ease-soft);
+}
+
+.contact-info-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.contact-info-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--grey-400);
+}
+
+.contact-info-value {
+  display: block;
+  margin-top: 3px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* ---------- Map / photo panel ---------- */
+
 .contact-map {
   position: relative;
-  margin-top: 50px;
-  height: 260px;
+  margin-top: 40px;
+  height: 240px;
   border-radius: 20px;
   overflow: hidden;
   background: var(--blue-900);
+}
+
+.contact-map-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  filter: saturate(0.7) brightness(0.55);
+}
+
+.contact-map-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 70% at 55% 45%, rgba(26, 63, 214, 0.45), transparent 70%),
+    linear-gradient(180deg, rgba(6, 10, 26, 0.2) 0%, rgba(6, 10, 26, 0.7) 100%);
 }
 
 .contact-map-grid {
@@ -39,14 +139,7 @@
     linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
   background-size: 34px 34px;
-  opacity: 0.6;
-}
-
-.contact-map::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(60% 60% at 55% 45%, rgba(26,63,214,0.5), transparent 70%);
+  opacity: 0.5;
 }
 
 .contact-map-pin {
@@ -84,7 +177,14 @@
   bottom: 18px;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.85);
+}
+
+/* ---------- Form ---------- */
+
+.contact-form-wrap {
+  display: flex;
+  flex-direction: column;
 }
 
 .contact-form {
@@ -157,6 +257,38 @@
     opacity: 0;
   }
 }
+
+/* ---------- Trust points ---------- */
+
+.contact-trust {
+  margin-top: 44px;
+  padding-top: 30px;
+  border-top: 1px solid var(--grey-200);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.trust-point {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--grey-600);
+}
+
+.trust-point-check {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--blue-50);
+  color: var(--blue-600);
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+/* ---------- WhatsApp FAB ---------- */
 
 .whatsapp-fab {
   position: fixed;
