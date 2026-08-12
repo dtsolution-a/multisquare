@@ -185,6 +185,16 @@ a.contact-info-row:hover .contact-info-icon {
 .contact-form-wrap {
   display: flex;
   flex-direction: column;
+  padding: clamp(30px, 4vw, 50px);
+  border: 1px solid var(--grey-200);
+  border-radius: 24px;
+  background: var(--grey-100);
+  transition: border-color 0.5s var(--ease-soft), box-shadow 0.5s var(--ease-soft);
+}
+
+.contact-form-wrap:focus-within {
+  border-color: var(--blue-100);
+  box-shadow: 0 30px 60px -35px rgba(10, 14, 26, 0.2);
 }
 
 .contact-form {
