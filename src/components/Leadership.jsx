@@ -13,6 +13,11 @@ const TEAM = [
     focus: "10+ years in management consultancy, driving strategic financial solutions across diverse sectors.",
     photo: mukeshKPatel,
     linkedin: "https://www.linkedin.com/in/mukeshkpatel/",
+    // Source photo has generous headroom on a bright, busy backdrop —
+    // pull the frame in a bit tighter so it sits at the same visual
+    // weight as the other founder's tighter, more formal portrait.
+    focalPosition: "center 12%",
+    focalPositionShort: "center 20%",
   },
   {
     name: "CA Mukesh M. Patel",
@@ -21,6 +26,8 @@ const TEAM = [
     focus: "10+ years as a Chartered Accountant, specializing in financial intricacies and client-focused solutions.",
     photo: mukeshMPatel,
     linkedin: "https://www.linkedin.com/in/mukeshmpatel-b9733b217/",
+    focalPosition: "center 20%",
+    focalPositionShort: "center 28%",
   },
 ];
 
@@ -80,8 +87,12 @@ export default function Leadership() {
         <div className="leader-grid leader-grid-founders">
           {TEAM.map((t) => (
             <article className="leader-card" key={t.name} onMouseMove={onMove}>
-              <div className="leader-portrait">
+              <div
+                className="leader-portrait"
+                style={{ "--focal": t.focalPosition, "--focal-short": t.focalPositionShort }}
+              >
                 <img src={t.photo} alt={t.name} className="leader-photo" />
+                <div className="leader-duotone" />
                 <div className="leader-light" />
               </div>
               <div className="leader-quote">
