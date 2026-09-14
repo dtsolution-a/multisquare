@@ -31,6 +31,10 @@ export default function PostPage() {
           stagger: 0.1,
           ease: "power4.out",
           delay: 0.15,
+          // Drop the filter/transform once settled — leaving a blur(0px)
+          // filter + transform in place can trip a Chromium compositing
+          // edge case that renders a glyph mid-word as clipped/garbled.
+          clearProps: "filter,transform",
         }
       );
 

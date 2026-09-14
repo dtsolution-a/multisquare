@@ -33,7 +33,18 @@ export default function MarketingCallout() {
         .fromTo(
           ".marketing-title .split-line > span",
           { yPercent: 110, opacity: 0, filter: "blur(8px)" },
-          { yPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.9, stagger: 0.1, ease: "power3.out" },
+          {
+            yPercent: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 0.9,
+            stagger: 0.1,
+            ease: "power3.out",
+            // Drop the filter/transform once settled — leaving a blur(0px)
+            // filter + transform in place can trip a Chromium compositing
+            // edge case that renders a glyph mid-word as clipped/garbled.
+            clearProps: "filter,transform",
+          },
           0
         )
         .fromTo(".marketing-lede", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.25)

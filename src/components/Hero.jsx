@@ -40,6 +40,10 @@ export default function Hero({ ready }) {
           duration: 1.3,
           ease: "power4.out",
           stagger: 0.12,
+          // Drop the filter/transform once settled — leaving a blur(0px)
+          // filter + transform in place can trip a Chromium compositing
+          // edge case that renders a glyph mid-word as clipped/garbled.
+          clearProps: "filter,transform",
         }
       )
         .fromTo(".hero-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, 0)
