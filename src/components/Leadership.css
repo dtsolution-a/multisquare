@@ -62,19 +62,23 @@
   background: linear-gradient(150deg, #0c1c4d, #1a3fd6 60%, #4a63e8);
 }
 
-.leader-photo {
+.leader-photo-bg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: var(--focal, center 18%);
+  /* Oversized well beyond the frame with background-size: cover so it
+     always fully fills — scale(--zoom) then shrinks this oversized,
+     already-gapless layer back down to "zoom out" a too-tight
+     close-up, without ever exposing an edge. */
+  inset: -40%;
+  background-size: cover;
+  background-position: var(--focal, center 18%);
+  background-repeat: no-repeat;
   filter: saturate(0.55) sepia(0.1);
+  transform: scale(var(--zoom, 1));
   transition: transform 0.8s var(--ease-lux);
 }
 
-.leader-card:hover .leader-photo {
-  transform: scale(1.05);
+.leader-card:hover .leader-photo-bg {
+  transform: scale(calc(var(--zoom, 1) * 1.05));
 }
 
 /* Unifies the two founders' otherwise mismatched backdrops (bright
@@ -213,7 +217,7 @@
     aspect-ratio: 3 / 2.5;
     max-height: 46vh;
   }
-  .leader-grid-founders .leader-photo {
-    object-position: var(--focal-short, center 25%);
+  .leader-grid-founders .leader-photo-bg {
+    background-position: var(--focal-short, var(--focal, center 18%));
   }
 }
