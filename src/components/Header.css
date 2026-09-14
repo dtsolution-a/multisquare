@@ -25,8 +25,8 @@
 .logo {
   position: relative;
   display: block;
-  width: clamp(120px, 12vw, 150px);
-  height: 34px;
+  width: clamp(140px, 13vw, 175px);
+  height: 42px;
   transition: transform 0.6s var(--ease-lux);
 }
 
@@ -191,6 +191,21 @@
   color: var(--white);
   font-size: 18px;
   font-weight: 500;
+}
+
+/* Nav links + logo + CTA get tight enough here that "Why M2" and
+   "Book a Consultation" can wrap onto a second line before the
+   hamburger tier kicks in — tighten spacing to keep everything on
+   one line instead. */
+@media (max-width: 1180px) and (min-width: 901px) {
+  .main-nav ul {
+    gap: 26px;
+  }
+  .header-cta {
+    padding: 12px 20px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 900px) {
