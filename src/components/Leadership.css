@@ -202,4 +202,7 @@
     aspect-ratio: 3 / 2.5;
     max-height: 46vh;
   }
+  .leader-grid-founders .leader-photo {
+    object-position: center 25%;
+  }
 }
