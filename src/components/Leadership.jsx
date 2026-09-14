@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { gsap, ScrollTrigger } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
 import mukeshKPatel from "../assets/founder-mukesh-k-patel.webp";
 import mukeshMPatel from "../assets/founder-mukesh-m-patel.webp";
 import "./Leadership.css";
@@ -13,13 +13,11 @@ const TEAM = [
     focus: "10+ years in management consultancy, driving strategic financial solutions across diverse sectors.",
     photo: mukeshKPatel,
     linkedin: "https://www.linkedin.com/in/mukeshkpatel/",
-    // This source photo is framed waist-up (smaller face-to-frame
-    // ratio) while the other founder's is a tight close-up headshot —
-    // keep this one at native scale and zoom the other one out (see
-    // below) so both faces read at the same size side by side.
-    focalPosition: "center 15%",
-    focalPositionShort: "center 43%",
-    zoom: 1,
+    stats: [
+      { value: "10+", label: "Years advising" },
+      { value: "2014", label: "Co-founded M2" },
+      { value: "40+", label: "Jurisdictions" },
+    ],
   },
   {
     name: "CA Mukesh M. Patel",
@@ -28,11 +26,11 @@ const TEAM = [
     focus: "10+ years as a Chartered Accountant, specializing in financial intricacies and client-focused solutions.",
     photo: mukeshMPatel,
     linkedin: "https://www.linkedin.com/in/mukeshmpatel-b9733b217/",
-    focalPosition: "center 25%",
-    focalPositionShort: "center 14%",
-    // Much tighter close-up than the other founder's photo — zoom the
-    // background out so his face isn't ~1.5x larger in the card.
-    zoom: 0.7,
+    stats: [
+      { value: "10+", label: "Years in practice" },
+      { value: "2014", label: "Co-founded M2" },
+      { value: "150+", label: "Entities structured" },
+    ],
   },
 ];
 
@@ -44,32 +42,33 @@ export default function Leadership() {
       gsap.utils.toArray(".leader-card").forEach((card, i) => {
         gsap.fromTo(
           card,
-          { opacity: 0, y: 50 },
+          { opacity: 0, y: 40 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
-            delay: i * 0.1,
+            duration: 0.8,
+            delay: i * 0.12,
             ease: "power3.out",
-            scrollTrigger: { trigger: card, start: "top 88%" },
+            scrollTrigger: { trigger: card, start: "top 90%" },
+          }
+        );
+        gsap.fromTo(
+          card.querySelectorAll(".leader-stat"),
+          { opacity: 0, y: 14 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.08,
+            ease: "power3.out",
+            scrollTrigger: { trigger: card, start: "top 85%" },
+            delay: 0.25 + i * 0.12,
           }
         );
       });
     }, rootRef);
     return () => ctx.revert();
   }, []);
-
-  const onMove = (e) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const light = card.querySelector(".leader-light");
-    gsap.to(light, {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      duration: 0.6,
-      ease: "power3.out",
-    });
-  };
 
   return (
     <section className="leadership section-pad" id="leadership" ref={rootRef}>
@@ -91,37 +90,30 @@ export default function Leadership() {
 
         <div className="leader-grid leader-grid-founders">
           {TEAM.map((t) => (
-            <article className="leader-card" key={t.name} onMouseMove={onMove}>
-              <div className="leader-portrait">
-                <div
-                  className="leader-photo-bg"
-                  role="img"
-                  aria-label={t.name}
-                  style={{
-                    backgroundImage: `url(${t.photo})`,
-                    "--focal": t.focalPosition,
-                    "--focal-short": t.focalPositionShort,
-                    "--zoom": t.zoom ?? 1,
-                  }}
-                />
-                <div className="leader-duotone" />
-                <div className="leader-light" />
-              </div>
-              <div className="leader-quote">
-                <svg viewBox="0 0 32 24" className="quote-mark">
-                  <path d="M0 24V13.5C0 5 5 0 13 0v5.5C8 5.5 5.5 8 5.5 13H13V24H0Zm18 0V13.5C18 5 23 0 31 0v5.5c-5 0-7.5 2.5-7.5 7.5H31V24H18Z" />
-                </svg>
-                <p>{t.focus}</p>
-              </div>
-              <div className="leader-info">
-                <div>
+            <article className="leader-card" key={t.name}>
+              <div className="leader-card-top">
+                <div className="leader-avatar">
+                  <img src={t.photo} alt={t.name} className="leader-avatar-img" />
+                </div>
+                <div className="leader-id">
                   <h3>{t.name}</h3>
-                  <p>{t.role}</p>
+                  <p className="leader-role">{t.role}</p>
                   <p className="leader-credentials">{t.credentials}</p>
                 </div>
                 <a href={t.linkedin} target="_blank" rel="noreferrer" className="leader-linkedin" aria-label="LinkedIn">
                   <span>in</span>
                 </a>
+              </div>
+
+              <p className="leader-focus">{t.focus}</p>
+
+              <div className="leader-stats">
+                {t.stats.map((s) => (
+                  <div className="leader-stat" key={s.label}>
+                    <span className="leader-stat-value">{s.value}</span>
+                    <span className="leader-stat-label">{s.label}</span>
+                  </div>
+                ))}
               </div>
             </article>
           ))}
