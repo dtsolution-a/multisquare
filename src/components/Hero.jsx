@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
 import useMagnetic from "../lib/useMagnetic";
 import logoWordmarkWhite from "../assets/logo-wordmark-white.png";
 import RotatingText from "./RotatingText";
@@ -12,10 +12,16 @@ const ROTATING_PHRASES = [
   "growth without compromise.",
 ];
 
+// Mesh resolution — kept modest so the warp math stays cheap every frame.
+const COLS = 22;
+const ROWS = 14;
+const REACH = 170; // px radius of cursor influence
+const STRENGTH = 26; // px max displacement at the cursor's center
+
 export default function Hero({ ready }) {
   const rootRef = useRef(null);
-  const lightRef = useRef(null);
   const ctaRef = useRef(null);
+  const svgRef = useRef(null);
 
   useMagnetic(ctaRef, 0.3);
 
@@ -42,40 +48,19 @@ export default function Hero({ ready }) {
           { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1, ease: "power3.out" },
           0
         )
-        .fromTo(
-          ".hero-eyebrow",
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: 0.8 },
-          "-=0.7"
-        )
+        .fromTo(".hero-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.7")
         .fromTo(
           ".hero-sub",
           { opacity: 0, y: 26, filter: "blur(8px)" },
           { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 },
           "-=0.7"
         )
-        .fromTo(
-          ".hero-cta-row > *",
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 },
-          "-=0.6"
-        )
-        .fromTo(
-          ".hero-form",
-          { opacity: 0, y: 40, filter: "blur(10px)" },
-          { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 },
-          "-=0.7"
-        )
-        .fromTo(
-          ".hero-form-field",
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
-          "-=0.6"
-        )
-        .fromTo(".hero-scroll-cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.3");
+        .fromTo(".hero-cta-row > *", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 }, "-=0.6")
+        .fromTo(".hero-scroll-cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.3")
+        .fromTo(".hero-mesh", { opacity: 0 }, { opacity: 1, duration: 1.6 }, 0);
 
       gsap.to(".hero-inner", {
-        yPercent: 22,
+        yPercent: 18,
         ease: "none",
         scrollTrigger: {
           trigger: rootRef.current,
@@ -89,26 +74,106 @@ export default function Hero({ ready }) {
     return () => ctx.revert();
   }, [ready]);
 
+  // Cursor-reactive mesh: a grid of points, each pushed away from the
+  // pointer by an amount that falls off with distance. Rendered as SVG
+  // lines and redrawn on rAF so the warp stays smooth without thrashing
+  // React state on every mousemove.
   useEffect(() => {
-    const el = rootRef.current;
-    const light = lightRef.current;
-    if (!el || !light || window.matchMedia("(hover: none)").matches) return;
+    const root = rootRef.current;
+    const svg = svgRef.current;
+    if (!root || !svg || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const onMove = (e) => {
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      gsap.to(light, { x, y, duration: 1.1, ease: "power3.out" });
+    let width = root.clientWidth;
+    let height = root.clientHeight;
+    let pointer = { x: width / 2, y: height * 0.4, active: false };
+    let smoothed = { x: pointer.x, y: pointer.y };
+    let rafId;
+
+    const cellW = () => width / (COLS - 1);
+    const cellH = () => height / (ROWS - 1);
+
+    const hLines = [];
+    const vLines = [];
+    for (let r = 0; r < ROWS; r++) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+      line.setAttribute("class", "hero-mesh-line");
+      svg.appendChild(line);
+      hLines.push(line);
+    }
+    for (let c = 0; c < COLS; c++) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+      line.setAttribute("class", "hero-mesh-line");
+      svg.appendChild(line);
+      vLines.push(line);
+    }
+
+    const pointAt = (c, r) => {
+      const x = c * cellW();
+      const y = r * cellH();
+      const dx = x - smoothed.x;
+      const dy = y - smoothed.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > REACH || !pointer.active) return [x, y];
+      const falloff = 1 - dist / REACH;
+      const push = falloff * falloff * STRENGTH;
+      const angle = Math.atan2(dy, dx);
+      return [x + Math.cos(angle) * push, y + Math.sin(angle) * push];
     };
 
-    el.addEventListener("mousemove", onMove);
-    return () => el.removeEventListener("mousemove", onMove);
+    const draw = () => {
+      smoothed.x += (pointer.x - smoothed.x) * 0.12;
+      smoothed.y += (pointer.y - smoothed.y) * 0.12;
+
+      for (let r = 0; r < ROWS; r++) {
+        const pts = [];
+        for (let c = 0; c < COLS; c++) pts.push(pointAt(c, r).join(","));
+        hLines[r].setAttribute("points", pts.join(" "));
+      }
+      for (let c = 0; c < COLS; c++) {
+        const pts = [];
+        for (let r = 0; r < ROWS; r++) pts.push(pointAt(c, r).join(","));
+        vLines[c].setAttribute("points", pts.join(" "));
+      }
+      rafId = requestAnimationFrame(draw);
+    };
+
+    const onResize = () => {
+      width = root.clientWidth;
+      height = root.clientHeight;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    };
+
+    const onMove = (e) => {
+      const rect = root.getBoundingClientRect();
+      pointer.x = e.clientX - rect.left;
+      pointer.y = e.clientY - rect.top;
+      pointer.active = true;
+    };
+    const onLeave = () => {
+      pointer.active = false;
+    };
+
+    onResize();
+    window.addEventListener("resize", onResize);
+    root.addEventListener("mousemove", onMove);
+    root.addEventListener("mouseleave", onLeave);
+    rafId = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
+      root.removeEventListener("mousemove", onMove);
+      root.removeEventListener("mouseleave", onLeave);
+      hLines.forEach((l) => l.remove());
+      vLines.forEach((l) => l.remove());
+    };
   }, []);
 
   return (
     <section className="hero" id="top" ref={rootRef}>
-      <div className="hero-grid" />
-      <div className="hero-cursor-light" ref={lightRef} />
+      <div className="hero-mesh">
+        <svg ref={svgRef} className="hero-mesh-svg" preserveAspectRatio="none" />
+      </div>
 
       <div className="container hero-inner">
         <img src={logoWordmarkWhite} alt="M2 &mdash; MultiSquare" className="hero-logo" />
@@ -140,29 +205,6 @@ export default function Hero({ ready }) {
             Explore Services
           </a>
         </div>
-
-        <form className="hero-form" onSubmit={(e) => e.preventDefault()}>
-          <div className="hero-form-field">
-            <input type="text" placeholder="Full name" required />
-          </div>
-          <div className="hero-form-field">
-            <input type="email" placeholder="Email address" required />
-          </div>
-          <div className="hero-form-field">
-            <select defaultValue="">
-              <option value="" disabled>
-                Area of interest
-              </option>
-              <option>Company Formation</option>
-              <option>Virtual CFO</option>
-              <option>M&amp;A</option>
-              <option>Tax Advisory</option>
-            </select>
-          </div>
-          <button type="submit" className="hero-form-submit hero-form-field">
-            Submit
-          </button>
-        </form>
       </div>
 
       <div className="hero-scroll-cue">
