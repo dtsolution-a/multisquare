@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "../lib/gsap";
 import useMagnetic from "../lib/useMagnetic";
+import skylineLineart from "../assets/skyline-lineart.webp";
 import RotatingText from "./RotatingText";
 import "./Hero.css";
 
@@ -50,7 +51,13 @@ export default function Hero({ ready }) {
         )
         .fromTo(".hero-cta-row > *", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 }, "-=0.6")
         .fromTo(".hero-scroll-cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.3")
-        .fromTo(".hero-mesh", { opacity: 0 }, { opacity: 1, duration: 1.6 }, 0);
+        .fromTo(".hero-mesh", { opacity: 0 }, { opacity: 1, duration: 1.6 }, 0)
+        .fromTo(
+          ".hero-skyline",
+          { opacity: 0, y: 40, scale: 1.04 },
+          { opacity: 1, y: 0, scale: 1, duration: 1.6, ease: "power3.out" },
+          0.2
+        );
 
       gsap.to(".hero-inner", {
         yPercent: 18,
@@ -167,6 +174,8 @@ export default function Hero({ ready }) {
       <div className="hero-mesh">
         <svg ref={svgRef} className="hero-mesh-svg" preserveAspectRatio="none" />
       </div>
+
+      <img src={skylineLineart} alt="" aria-hidden="true" className="hero-skyline" />
 
       <div className="container hero-inner">
         <p className="hero-eyebrow eyebrow" style={{ color: "var(--blue-500)" }}>

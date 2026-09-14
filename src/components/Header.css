@@ -11,9 +11,7 @@
 
 .site-header.is-scrolled {
   padding: 14px 0;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  background: var(--white);
   box-shadow: 0 8px 30px rgba(10, 14, 26, 0.06);
 }
 
@@ -120,11 +118,28 @@
   padding: 13px 26px;
   font-size: 13px;
   opacity: 0.94;
-  transition: opacity 0.4s var(--ease-soft);
+  transition: opacity 0.4s var(--ease-soft), background 0.4s var(--ease-soft),
+    color 0.4s var(--ease-soft);
 }
 
 .header-cta:hover {
   opacity: 1;
+}
+
+/* Over the transparent hero (no header background yet) the default dark
+   button reads low-contrast against the navy backdrop — flip it to a
+   white pill with blue text until the header picks up its own bg. */
+.site-header:not(.is-scrolled) .header-cta {
+  background: var(--white);
+  color: var(--blue-600);
+}
+
+.site-header:not(.is-scrolled) .header-cta::before {
+  background: var(--blue-600);
+}
+
+.site-header:not(.is-scrolled) .header-cta:hover {
+  color: var(--white);
 }
 
 .nav-burger {
