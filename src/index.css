@@ -190,6 +190,19 @@ h1, h2, h3, h4 {
   padding: clamp(90px, 12vw, 180px) 0;
 }
 
+/* 13"-15" laptop tier (1024-1440px, and typically 700-900px tall).
+   Desktop values above are tuned for 17"+/27" screens and leave far too
+   much dead vertical space here — tighten rhythm without touching the
+   tablet/mobile (<=900px) breakpoints below. */
+@media (max-width: 1440px) and (min-width: 901px) {
+  .section-pad {
+    padding: clamp(64px, 8vw, 110px) 0;
+  }
+  .container {
+    padding: 0 clamp(24px, 4vw, 56px);
+  }
+}
+
 .magnetic {
   will-change: transform;
 }
