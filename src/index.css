@@ -106,7 +106,10 @@ h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.04;
+  /* 1.04 is tight enough that descenders (g, y, p) on one .split-line
+     clip against the next line's overflow:hidden box, since each line
+     is a separate stacked block sized exactly to line-height. */
+  line-height: 1.14;
   color: var(--ink);
 }
 
