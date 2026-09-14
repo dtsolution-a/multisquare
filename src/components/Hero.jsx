@@ -2,8 +2,6 @@ import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import useMagnetic from "../lib/useMagnetic";
 import logoWordmarkWhite from "../assets/logo-wordmark-white.png";
-import dubaiDuskBurj from "../assets/dubai-dusk-burj.webp";
-import towerIsolated from "../assets/tower-isolated.webp";
 import RotatingText from "./RotatingText";
 import "./Hero.css";
 
@@ -16,7 +14,6 @@ const ROTATING_PHRASES = [
 
 export default function Hero({ ready }) {
   const rootRef = useRef(null);
-  const bgRef = useRef(null);
   const lightRef = useRef(null);
   const ctaRef = useRef(null);
 
@@ -77,26 +74,8 @@ export default function Hero({ ready }) {
         )
         .fromTo(".hero-scroll-cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.3");
 
-      gsap.to(bgRef.current, {
-        scale: 1.18,
-        duration: 22,
-        ease: "none",
-      });
-
       gsap.to(".hero-inner", {
         yPercent: 22,
-        ease: "none",
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      gsap.to(bgRef.current, {
-        yPercent: 12,
-        scale: 1.05,
         ease: "none",
         scrollTrigger: {
           trigger: rootRef.current,
@@ -120,12 +99,6 @@ export default function Hero({ ready }) {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       gsap.to(light, { x, y, duration: 1.1, ease: "power3.out" });
-      gsap.to(".hero-inner", {
-        x: (x / rect.width - 0.5) * -20,
-        y: (y / rect.height - 0.5) * -14,
-        duration: 1.2,
-        ease: "power3.out",
-      });
     };
 
     el.addEventListener("mousemove", onMove);
@@ -134,13 +107,7 @@ export default function Hero({ ready }) {
 
   return (
     <section className="hero" id="top" ref={rootRef}>
-      <div className="hero-bg" ref={bgRef}>
-        <img src={dubaiDuskBurj} alt="" className="hero-bg-photo" />
-        <img src={towerIsolated} alt="" className="hero-tower" />
-        <div className="hero-noise" />
-        <div className="hero-vignette" />
-      </div>
-
+      <div className="hero-grid" />
       <div className="hero-cursor-light" ref={lightRef} />
 
       <div className="container hero-inner">
