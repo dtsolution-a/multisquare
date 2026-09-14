@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "../lib/gsap";
 import useMagnetic from "../lib/useMagnetic";
-import logoWordmarkWhite from "../assets/logo-wordmark-white.png";
 import RotatingText from "./RotatingText";
 import "./Hero.css";
 
@@ -42,13 +41,7 @@ export default function Hero({ ready }) {
           stagger: 0.12,
         }
       )
-        .fromTo(
-          ".hero-logo",
-          { opacity: 0, y: 20, scale: 0.92, filter: "blur(10px)" },
-          { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1, ease: "power3.out" },
-          0
-        )
-        .fromTo(".hero-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.7")
+        .fromTo(".hero-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8 }, 0)
         .fromTo(
           ".hero-sub",
           { opacity: 0, y: 26, filter: "blur(8px)" },
@@ -176,8 +169,6 @@ export default function Hero({ ready }) {
       </div>
 
       <div className="container hero-inner">
-        <img src={logoWordmarkWhite} alt="M2 &mdash; MultiSquare" className="hero-logo" />
-
         <p className="hero-eyebrow eyebrow" style={{ color: "var(--blue-500)" }}>
           Dubai, UAE &mdash; Est. Business Advisory
         </p>

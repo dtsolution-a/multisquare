@@ -35,19 +35,13 @@
   padding-bottom: 130px;
 }
 
-.hero-logo {
-  width: clamp(180px, 20vw, 260px);
-  height: auto;
-  margin-bottom: 34px;
-}
-
 .hero-eyebrow {
   font-size: 12.5px;
-  margin-bottom: 26px;
+  margin-bottom: 22px;
 }
 
 .hero-title {
-  font-size: clamp(44px, 7.2vw, 104px);
+  font-size: clamp(32px, 4.6vw, 64px);
   color: var(--white);
   max-width: 16ch;
   font-weight: 600;
@@ -119,15 +113,11 @@
     padding-top: 100px;
     padding-bottom: 60px;
   }
-  .hero-logo {
-    width: clamp(130px, 30vw, 190px);
-    margin-bottom: 18px;
-  }
   .hero-eyebrow {
     margin-bottom: 16px;
   }
   .hero-title {
-    font-size: clamp(28px, 8vw, 46px);
+    font-size: clamp(26px, 8vw, 38px);
   }
   .hero-sub {
     margin-top: 18px;
@@ -150,15 +140,11 @@
     padding-top: 90px;
     padding-bottom: 40px;
   }
-  .hero-logo {
-    width: clamp(120px, 12vw, 170px);
-    margin-bottom: 18px;
-  }
   .hero-eyebrow {
     margin-bottom: 14px;
   }
   .hero-title {
-    font-size: clamp(30px, 4.8vw, 66px);
+    font-size: clamp(28px, 3.6vw, 48px);
   }
   .hero-sub {
     margin-top: 16px;

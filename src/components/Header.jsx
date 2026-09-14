@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "../lib/gsap";
 import useMagnetic from "../lib/useMagnetic";
-import logoMarkWhite from "../assets/logo-mark-white.png";
-import logoMarkNavy from "../assets/logo-mark-navy.png";
+import logoWordmarkWhite from "../assets/logo-wordmark-white.png";
+import logoWordmarkNavy from "../assets/logo-wordmark-navy.png";
 import "./Header.css";
 
 const NAV = [
@@ -40,8 +40,8 @@ export default function Header({ ready }) {
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
       <div className="container header-inner">
         <Link to="/" className="logo header-reveal">
-          <img src={logoMarkWhite} alt="M2" className="logo-img logo-img-white" />
-          <img src={logoMarkNavy} alt="M2" className="logo-img logo-img-navy" />
+          <img src={logoWordmarkWhite} alt="M2 &mdash; MultiSquare" className="logo-img logo-img-white" />
+          <img src={logoWordmarkNavy} alt="M2 &mdash; MultiSquare" className="logo-img logo-img-navy" />
         </Link>
 
         <nav className="main-nav header-reveal">
